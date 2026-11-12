@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.1, maximum-scale=1, user-scalable=yes">
+<!-- Primary Meta Tags -->
+<title>CSS 3D Shadows & Taxonomy Playground</title>
+<meta name="description" content="Explore an interactive CSS 3D playground with 10 custom shadow, bevel, and depth demos. Copy ready-to-use CSS snippets for your next web project.">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yourwebsite.com/css-3d-lab.html"> <!-- Replace with your URL -->
+<meta property="og:title" content="CSS 3D Shadows & Taxonomy Playground">
+<meta property="og:description" content="Explore 10 interactive CSS 3D demos. Copy code for bevels, perspective, extrusion, and true 3D transforms.">
+<!-- If you have a screenshot, add it here -->
+<!-- <meta property="og:image" content="https://yourwebsite.com/preview-image.png"> -->
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://yourwebsite.com/css-3d-lab.html"> <!-- Replace with your URL -->
+<meta property="twitter:title" content="CSS 3D Shadows & Taxonomy Playground">
+<meta property="twitter:description" content="Explore 10 interactive CSS 3D demos. Copy code for bevels, perspective, extrusion, and true 3D transforms.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          'ebs-orange-light': '#FFB347',
+          'ebs-orange': '#FF8C00',
+          'ebs-orange-dark': '#CC5500'
+        },
+        fontSize: {
+          '2xs': '0.65rem',
+          '3xs': '0.55rem'
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* =========================================
+     1. IMPORTS & BASE RESETS
+     ========================================= */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { 
+    font-family: 'Inter', sans-serif; 
+  }
+  
+  body { 
+    -webkit-font-smoothing: antialiased; 
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  main { 
+    transition: background 0.3s; 
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #FFB347, #FF8C00, #CC5500); }
+  .dark ::-webkit-scrollbar-track { background: #1a1a1a; }
+
+  /* =========================================
+     2. THEME VARIABLES
+     ========================================= */
+  /* --- DARK THEME --- */
+  :root.dark {
+    /* Layout */
+    --bg-base: #18181b;
+    --bg-surface: #27272a;
+    --bg-deep: #09090b;
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --border-color: #333333;
+    --shadow-dark: rgba(0, 0, 0, 0.8);
+    --shadow-light: rgba(255, 255, 255, 0.05);
+    
+    /* Code Viewer */
+    --code-bg: #000000;
+    --code-text: #a1a1aa;
+    --code-border: #333333;
+    --btn-bg: #3f3f46;
+    --btn-text: #ffffff;
+    
+    /* Bevel Shared Shadows */
+    --bev-sh-dark: rgba(0, 0, 0, 0.8);
+    --bev-sh-light: rgba(255, 255, 255, 0.15);
+    --bev-sh-deep: rgba(0, 0, 0, 0.95);
+    
+    /* Bevel Specific Colors */
+    --bev-window-outer: #3f3f46;
+    --bev-window-inner: #121212;
+    --bev-card-bg-1: #2f2f35;
+    --bev-card-bg-2: #242429;
+    --bev-neumorphic-bg: #18181b;
+    --bev-metal-bg-1: #3f3f46;
+    --bev-metal-bg-2: #18181b;
+    --bev-metal-border: #52525b;
+    --bev-glass-bg: rgba(255, 255, 255, 0.1);
+    
+    /* Demo Box Variables */
+    --demo-bg: #27272a;
+    --demo-border: #3f3f46;
+  }
+  
+  /* --- LIGHT THEME --- */
+  :root.light {
+    /* Layout */
+    --bg-base: #e4e4e7;
+    --bg-surface: #f4f4f5;
+    --bg-deep: #d4d4d8;
+    --text-main: #18181b;
+    --text-muted: #52525b;
+    --border-color: #d4d4d8;
+    --shadow-dark: rgba(0, 0, 0, 0.15);
+    --shadow-light: rgba(255, 255, 255, 0.8);
+    
+    /* Code Viewer */
+    --code-bg: #f4f4f5;
+    --code-text: #18181b;
+    --code-border: #d4d4d8;
+    --btn-bg: #d4d4d8;
+    --btn-text: #18181b;
+    
+    /* Bevel Shared Shadows (softer for light mode) */
+    --bev-sh-dark: rgba(0, 0, 0, 0.15);
+    --bev-sh-light: rgba(255, 255, 255, 0.9);
+    --bev-sh-deep: rgba(0, 0, 0, 0.25);
+    
+    /* Bevel Specific Colors */
+    --bev-window-outer: #d4d4d8;
+    --bev-window-inner: #a1a1aa;
+    --bev-card-bg-1: #f4f4f5;
+    --bev-card-bg-2: #e4e4e7;
+    --bev-neumorphic-bg: #e4e4e7;
+    --bev-metal-bg-1: #f4f4f5;
+    --bev-metal-bg-2: #d4d4d8;
+    --bev-metal-border: #a1a1aa;
+    --bev-glass-bg: rgba(0, 0, 0, 0.05);
+    
+    /* Demo Box Variables */
+    --demo-bg: #ffffff;
+    --demo-border: #e4e4e7;
+  }
+
+  /* =========================================
+     3. UTILITIES & ANIMATIONS
+     ========================================= */
+  .gradient-bg { 
+    background: linear-gradient(135deg, #FFB347 0%, #FF8C00 50%, #CC5500 100%); 
+  }
+  
+  .gradient-text { 
+    background: linear-gradient(90deg, #FFB347, #FF8C00, #CC5500); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+  }
+  
+  .scene-tag { 
+    font-size: 9px; 
+    letter-spacing: 0.05em; 
+  }
+  
+  .print-preview { 
+    transform-origin: top center; 
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spinCube {
+    0% { transform: rotateX(-20deg) rotateY(0deg); }
+    100% { transform: rotateX(-20deg) rotateY(360deg); }
+  }
+
+  @keyframes clock-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.15; }
+  }
+
+  .animate-clock-blink {
+    animation: clock-blink 1s step-end infinite;
+  }
+
+  /* =========================================
+     4. LAYOUT & HEADER COMPONENTS
+     ========================================= */
+  /* --- Header Gradients & Bevels --- */
+  :root.dark .header-gradient {
+    background: linear-gradient(180deg, #27272a 0%, #09090b 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  :root.light .header-gradient {
+    background: linear-gradient(180deg, #ffffff 0%, #d4d4d8 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  :root.dark .header-bevel {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 8px 16px -2px rgba(0, 0, 0, 0.8),
+      0 3px 6px -1px rgba(0, 0, 0, 0.5);
+  }
+  :root.light .header-bevel {
+    box-shadow: 
+      inset 0 2px 0 rgba(255, 255, 255, 1),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+      0 6px 12px -2px rgba(0, 0, 0, 0.2),
+      0 2px 4px -1px rgba(0, 0, 0, 0.15);
+  }
+  .header-bevel { 
+    z-index: 40; 
+  }
+
+  .header-elevated {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  /* --- Logo --- */
+  .logo {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: -0.5px;
+    transition: all 0.3s ease;
+  }
+  :root.dark .logo {
+    background: linear-gradient(135deg, #FFB347 0%, #FF8C00 50%, #CC5500 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      inset 0 2px 3px rgba(255, 255, 255, 0.6),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+      0 4px 6px -1px rgba(0, 0, 0, 0.6);
+  }
+  :root.light .logo {
+    background: #ffffff;
+    color: #CC5500;
+    border: 2px solid #FF8C00;
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 1),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.05),
+      0 4px 6px -1px rgba(0, 0, 0, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* =========================================
+     5. TABS & PANELS
+     ========================================= */
+  .tab-btn.active { 
+    border-left: 2px solid #FF8C00; 
+    background: rgba(255, 140, 0, 0.08); 
+  }
+  .tab-btn:not(.active) {
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.5), 0 8px 16px -2px rgba(0, 0, 0, 0.5), 0 3px 6px -1px rgba(255, 255, 255, 0.5);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px !important;
+  }
+
+  .panel {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+  }
+  .panel.active {
+    display: flex;
+  }
+
+  /* --- Panel Header (Raised) --- */
+  .panel-header {
+    position: relative;
+    border-radius: 0 6px 6px 0; 
+    padding: 6px 8px; 
+    transform: translateY(-2px); 
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s;
+    margin-bottom: 12px; 
+    border-left: 3px solid; /* Merged from original */
+  }
+  .panel-header > div {
+    margin-bottom: 0 !important;
+  }
+  .panel-header:hover {
+    transform: translateY(-4px);
+  }
+
+  :root.dark .panel-header {
+    background: linear-gradient(to bottom, #52525b 0%, #18181b 100%);
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      0 8px 16px -2px rgba(0, 0, 0, 0.9),
+      0 3px 6px -1px rgba(0, 0, 0, 0.8);
+  }
+  :root.dark .panel-header:hover {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 12px 20px -3px rgba(0, 0, 0, 0.95),
+      0 5px 8px -2px rgba(0, 0, 0, 0.8);
+  }
+
+  :root.light .panel-header {
+    background: linear-gradient(to bottom, #ffffff 0%, #e4e4e7 100%);
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      0 6px 12px -2px rgba(0, 0, 0, 0.15),
+      0 2px 4px -1px rgba(0, 0, 0, 0.1);        
+  }
+  :root.light .panel-header:hover {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      0 10px 15px -3px rgba(0, 0, 0, 0.2),
+      0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* =========================================
+     6. BEVEL DEMOS (1-5)
+     ========================================= */
+  /* 1. Deep Recessed Window */
+  .bevel-window-outer {
+    width: 220px;
+    height: 220px;
+    background-color: var(--bev-window-outer);
+    padding: 18px;
+    border-radius: 4px;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    box-shadow:
+      inset 2px 2px 4px var(--bev-sh-light),
+      inset -2px -2px 4px var(--bev-sh-dark),
+      0 20px 30px -10px var(--bev-sh-dark);
+  }
+  .bevel-window-inner {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bev-window-inner);
+    border-radius: 2px;
+    transition: box-shadow 0.3s ease;
+    box-shadow:
+      inset 15px 15px 20px var(--bev-sh-deep),
+      inset -2px -2px 5px var(--bev-sh-light),
+      inset 0 0 30px var(--bev-sh-deep);
+  }
+  .bevel-window-outer:hover {
+    box-shadow: none;
+  }
+  .bevel-window-outer:hover .bevel-window-inner {
+    box-shadow: none;
+  }
+
+  /* 2. Raised Card */
+  .bevel-card {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(145deg, var(--bev-card-bg-1), var(--bev-card-bg-2));
+    border-radius: 16px;
+    transition: background 0.3s;
+    box-shadow:
+      10px 10px 20px var(--bev-sh-dark),
+      -5px -5px 15px var(--bev-sh-light),
+      inset 1px 1px 1px var(--bev-sh-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-muted);
+  }
+
+  /* 3. Neumorphic Pressed Button */
+  .bevel-neumorphic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--bev-neumorphic-bg);
+    transition: background 0.3s;
+    box-shadow:
+      inset 8px 8px 16px var(--bev-sh-dark),
+      inset -8px -8px 16px var(--bev-sh-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-muted);
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+
+  /* 4. Glossy Glass Bevel */
+  .bevel-glass {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    background: var(--bev-glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--bev-sh-light);
+    transition: background 0.3s, border-color 0.3s;
+    box-shadow:
+      inset 2px 2px 5px var(--bev-sh-light),
+      inset -2px -2px 10px var(--bev-sh-dark),
+      0 15px 35px var(--bev-sh-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* 5. Chunky Metallic */
+  .bevel-metallic {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--bev-metal-bg-1) 0%, var(--bev-metal-bg-2) 100%);
+    border: 4px solid var(--bev-metal-border);
+    transition: background 0.3s, border-color 0.3s;
+    box-shadow:
+      inset 4px 4px 0px var(--bev-sh-light),
+      inset -6px -6px 0px var(--bev-sh-dark),
+      8px 8px 0px var(--bev-sh-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* =========================================
+     7. TAXONOMY DEMOS (6-10)
+     ========================================= */
+  .demo-box {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 800px;
+    position: relative;
+  }
+
+  /* 6. Perspective */
+  .p-card {
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    border-radius: 12px;
+    transform: rotateY(25deg) rotateX(10deg);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: -10px 10px 20px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+  }
+  .p-card:hover {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+
+  /* 7. Extrusion */
+  .p-extrude-btn {
+    width: 120px;
+    height: 50px;
+    background: #ef4444;
+    color: white;
+    font-weight: 900;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 
+      0px 2px 0 #b91c1c,
+      0px 4px 0 #b91c1c,
+      0px 6px 0 #b91c1c,
+      0px 8px 0 #b91c1c,
+      0px 10px 10px rgba(0,0,0,0.5);
+    transition: all 0.1s ease;
+    transform: translateY(-4px);
+  }
+  .p-extrude-btn:active {
+    transform: translateY(2px);
+    box-shadow: 
+      0px 2px 0 #b91c1c,
+      0px 4px 0 #b91c1c,
+      0px 5px 5px rgba(0,0,0,0.5);
+  }
+
+  /* 8. Elevation */
+  .p-elevation-card {
+    width: 140px;
+    height: 140px;
+    background: var(--bg-surface);
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+    font-weight: bold;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+  }
+  .p-elevation-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0px 25px 35px rgba(0,0,0,0.4);
+  }
+
+  /* 9. Clipping */
+  .p-clip-wrapper {
+    filter: drop-shadow(0px 15px 10px rgba(0,0,0,0.4));
+    transition: transform 0.3s ease;
+  }
+  .p-clip-wrapper:hover {
+    transform: translateY(-5px);
+  }
+  .p-clip-hex {
+    width: 140px;
+    height: 160px;
+    background: linear-gradient(135deg, #10b981, #047857);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+  }
+
+  /* 10. True 3D Cube */
+  .p-cube-scene {
+    width: 100px;
+    height: 100px;
+    perspective: 600px;
+  }
+  .p-cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-20deg) rotateY(45deg);
+    animation: spinCube 6s infinite linear;
+    will-change: transform;
+  }
+  .p-cube-face {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(192, 132, 252, 0.9);
+    border: 2px solid #a855f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    font-size: 12px;
+    backface-visibility: hidden;
+  }
+  .face-front  { transform: translateZ(50px); }
+  .face-back   { transform: rotateY(180deg) translateZ(50px); }
+  .face-right  { transform: rotateY(90deg) translateZ(50px); }
+  .face-left   { transform: rotateY(-90deg) translateZ(50px); }
+  .face-top    { transform: rotateX(90deg) translateZ(50px); }
+  .face-bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+  /* =========================================
+     8. CODE VIEWER
+     ========================================= */
+  pre {
+    padding: 2px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px !important;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    transition: color 0.3s;
+  }
+</style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-hidden h-screen">
+
+<header class="fixed top-0 left-0 right-0 h-9 header-gradient text-gray-800 dark:text-white flex items-center justify-between px-3 z-30 header-bevel">
+<div class="flex items-center space-x-2">
+<div class="logo">
+<span>CSS</span>
+</div>
+<span class="text-base font-semibold tracking-tight">CSS 3D Shadows Playground</span>
+</div>
+<div class="flex items-center space-x-3">
+<!-- Theme Toggle Button -->
+<button id="themeToggle" class="h-6 w-6 text-gray-600 dark:text-white/80 transition rounded-full header-elevated flex items-center justify-center text-xs"> 
+<i id="themeIcon" class="fas fa-moon"></i> 
+</button>
+<div class="text-2xs text-gray-500 dark:text-white/60">v1.2</div>
+</div>
+</header>
+
+<div class="flex pt-9 pb-9 h-full overflow-hidden">
+<!-- Added overflow-y-auto to handle 10 buttons -->
+<div class="tab-bar w-11 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col items-center py-2 space-y-2 overflow-y-auto">
+<button data-target="panel-1" class="tab-btn active w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-window-maximize text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Window</span>
+</button>
+<button data-target="panel-2" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-layer-group text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Raised</span>
+</button>
+<button data-target="panel-3" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-hand-pointer text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Pressed</span>
+</button>
+<button data-target="panel-4" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-droplet text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Glass</span>
+</button>
+<button data-target="panel-5" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-box text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Chunky</span>
+</button>
+
+<!-- New Taxonomy Tabs -->
+<button data-target="panel-6" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-eye text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Persp.</span>
+</button>
+<button data-target="panel-7" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-boxes-stacked text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Extrude</span>
+</button>
+<button data-target="panel-8" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-arrow-up text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Elevate</span>
+</button>
+<button data-target="panel-9" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-scissors text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">Clip</span>
+</button>
+<button data-target="panel-10" class="tab-btn w-9 h-8 flex-shrink-0 flex flex-col items-center justify-center rounded overflow-hidden">
+<i class="fas fa-cube text-xs text-gray-600 dark:text-gray-400"></i>
+<span class="text-[7px] text-gray-600 dark:text-gray-400 truncate">True 3D</span>
+</button>
+
+<div class="flex-1"></div>
+<button id="printBtn" class="tab-btn w-9 h-8 flex-shrink-0 flex items-center justify-center rounded">
+<i class="fas fa-print text-xs text-gray-600 dark:text-gray-400"></i>
+</button>
+</div>
+
+<main class="flex-1 min-h-0 overflow-hidden p-3">
+
+<!-- =========================================
+     EXISTING 5 BEVEL PANELS
+     ========================================= -->
+
+<div id="panel-1" class="panel h-full flex-col min-h-0 overflow-hidden active">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+<div class="flex items-center mb-2 overflow-hidden">
+<h1 class="text-[13px] font-bold">Demo 1: Deep Recessed Window</h1>
+</div>
+</div>
+
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+<div class="bevel-window-outer">
+<div class="bevel-window-inner"></div>
+</div>
+</div>
+
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+<button class="copy-btn text-3xs text-ebs-orange" data-target="code-1">
+<i class="fas fa-copy mr-0.5"></i>
+<span>Copy</span>
+</button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-1"><code>.bevel-window-outer {
+  width: 220px;
+  height: 220px;
+  background-color: var(--bev-window-outer);
+  padding: 18px;
+  border-radius: 4px;
+  box-shadow:
+  inset 2px 2px 4px var(--bev-sh-light),
+  inset -2px -2px 4px var(--bev-sh-dark),
+  0 20px 30px -10px var(--bev-sh-dark);
+  }
+  
+  .bevel-window-inner {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bev-window-inner);
+  border-radius: 2px;
+  box-shadow:
+  inset 15px 15px 20px var(--bev-sh-deep),
+  inset -2px -2px 5px var(--bev-sh-light),
+  inset 0 0 30px var(--bev-sh-deep);
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="panel-2" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 2: Raised Card</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+<div class="bevel-card">Content</div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-2">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-2"><code>.bevel-card {
+  width: 220px;
+  height: 220px;
+  background: linear-gradient(145deg, var(--bev-card-bg-1), var(--bev-card-bg-2));
+  border-radius: 16px;
+  box-shadow: 
+    10px 10px 20px var(--bev-sh-dark),
+    -5px -5px 15px var(--bev-sh-light),
+    inset 1px 1px 1px var(--bev-sh-light);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="panel-3" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 3: Neumorphic Pressed</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+<div class="bevel-neumorphic">PUSH</div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-3">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-3"><code>.bevel-neumorphic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--bev-neumorphic-bg);
+  box-shadow: 
+    inset 8px 8px 16px var(--bev-sh-dark),
+    inset -8px -8px 16px var(--bev-sh-light);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="panel-4" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 4: Glossy Glass Bevel</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+<div class="bevel-glass"></div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-4">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-4"><code>.bevel-glass {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  background: var(--bev-glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--bev-sh-light);
+  box-shadow: 
+    inset 2px 2px 5px var(--bev-sh-light),
+    inset -2px -2px 10px var(--bev-sh-dark),
+    0 15px 35px var(--bev-sh-dark);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="panel-5" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 5: Chunky Metallic</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+  <div class="bevel-metallic"></div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-5">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-5"><code>.bevel-metallic {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--bev-metal-bg-1) 0%, var(--bev-metal-bg-2) 100%);
+  border: 4px solid var(--bev-metal-border);
+  box-shadow: 
+    inset 4px 4px 0px var(--bev-sh-light),
+    inset -6px -6px 0px var(--bev-sh-dark),
+    8px 8px 0px var(--bev-sh-dark);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- =========================================
+     NEW 5 TAXONOMY PANELS
+     ========================================= -->
+
+<!-- 6. Perspective -->
+<div id="panel-6" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 6: Perspective</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+  <div class="demo-box">
+    <div class="p-card">3D TILT</div>
+  </div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-6">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-6"><code>.container {
+  perspective: 800px;
+}
+
+.card {
+  transform: rotateY(25deg) rotateX(10deg);
+  transition: transform 0.4s;
+}
+
+.card:hover {
+  transform: rotateY(0deg) rotateX(0deg);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 7. Extrusion -->
+<div id="panel-7" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 7: Extrusion</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+  <div class="demo-box">
+    <button class="p-extrude-btn">PRESS ME</button>
+  </div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-7">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-7"><code>.button {
+  background: #ef4444;
+  transform: translateY(-4px);
+  box-shadow: 
+    0px 2px 0 #b91c1c,
+    0px 4px 0 #b91c1c,
+    0px 6px 0 #b91c1c,
+    0px 8px 0 #b91c1c,
+    0px 10px 10px rgba(0,0,0,0.5);
+}
+
+.button:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0px 2px 0 #b91c1c,
+    0px 4px 0 #b91c1c,
+    0px 5px 5px rgba(0,0,0,0.5);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 8. Elevation -->
+<div id="panel-8" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 8: Elevation</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+  <div class="demo-box">
+    <div class="p-elevation-card">FLOAT</div>
+  </div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-8">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-8"><code>.card {
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0px 25px 35px rgba(0,0,0,0.4);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 9. Clipping -->
+<div id="panel-9" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 9: Clipping</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+  <div class="demo-box">
+    <div class="p-clip-wrapper">
+      <div class="p-clip-hex">HEX</div>
+    </div>
+  </div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-9">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-9"><code>/* Wrapper handles the shadow */
+.wrapper {
+  filter: drop-shadow(0px 15px 10px rgba(0,0,0,0.4));
+}
+
+.hexagon {
+  width: 140px;
+  height: 160px;
+  background: #10b981;
+  clip-path: polygon(
+    50% 0%, 100% 25%, 100% 75%, 
+    50% 100%, 0% 75%, 0% 25%
+  );
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 10. True 3D -->
+<div id="panel-10" class="panel h-full flex-col min-h-0 overflow-hidden">
+<div class="panel-header border-l-ebs-orange pl-2 mb-2">
+  <div class="flex items-center mb-2 overflow-hidden">
+    <h1 class="text-[13px] font-bold">Demo 10: True 3D Cube</h1>
+  </div>
+</div>
+<div class="panel-content space-y-3 flex flex-col flex-1 min-h-0 overflow-hidden">
+<div class="demo bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 w-full flex-1 flex items-center justify-center">
+  <div class="demo-box">
+    <div class="p-cube-scene">
+      <div class="p-cube">
+        <div class="p-cube-face face-front">FRONT</div>
+        <div class="p-cube-face face-back">BACK</div>
+        <div class="p-cube-face face-right">RIGHT</div>
+        <div class="p-cube-face face-left">LEFT</div>
+        <div class="p-cube-face face-top">TOP</div>
+        <div class="p-cube-face face-bottom">BOTTOM</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="code bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+  <h3 class="text-xs font-semibold flex items-center">CSS Code Snippet </h3>
+  <button class="copy-btn text-3xs text-ebs-orange" data-target="code-10">
+    <i class="fas fa-copy mr-0.5"></i>
+    <span>Copy</span>
+  </button>
+</div>
+<div class="p-1 bg-gray-50 dark:bg-gray-900 rounded flex-1 min-h-0">
+<div class="h-full p-2 bg-gradient-to-r from-ebs-orange-light/10 to-ebs-orange-dark/10 rounded border border-ebs-orange/30 overflow-y-auto">
+<pre id="code-10"><code>.scene { perspective: 600px; }
+
+.cube {
+  transform-style: preserve-3d;
+  animation: spin 6s infinite linear;
+}
+
+.face-front  { transform: translateZ(50px); }
+.face-back   { transform: rotateY(180deg) translateZ(50px); }
+.face-right  { transform: rotateY(90deg) translateZ(50px); }
+.face-left   { transform: rotateY(-90deg) translateZ(50px); }
+.face-top    { transform: rotateX(90deg) translateZ(50px); }
+.face-bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+@keyframes spin {
+  100% { transform: rotateX(-20deg) rotateY(360deg); }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+</div>
+
+<footer class="fixed bottom-0 left-0 right-0 h-10 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between px-3 z-30">
+<div class="flex items-center space-x-2">
+  <div class="w-5 h-5 rounded-full flex items-center justify-center">
+    <i class="fas fa-clock text-gray-800 dark:text-white text-2xs"></i>
+  </div>
+<div id="live-clock" class="flex items-center text-2xs font-medium text-gray-800 dark:text-gray-200 tabular-nums">
+  <span id="clock-hh" class="px-0.5">00</span>
+  <span class="opacity-50 animate-pulse">:</span>
+  <span id="clock-mm" class="px-0.5">00</span>
+  <span class="opacity-50 animate-pulse">:</span>
+  <span id="clock-ss" class="px-0.5">00</span>
+  <span id="clock-ampm" class="ml-1 text-[8px] uppercase tracking-wider opacity-80">AM</span>
+</div>
+</div>
+
+<div class="text-2xs text-gray-400">
+    <span class="text-ebs-orange">#css4D</span> Playground
+  </div>
+</footer>
+
+<script>
+    // --- Tab Switching Logic ---
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        const targetId = tab.getAttribute('data-target');
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+
+    // --- Theme Toggle Logic ---
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlElement = document.documentElement;
+
+    themeToggleBtn.addEventListener('click', () => {
+      if (htmlElement.classList.contains('dark')) {
+        htmlElement.classList.remove('dark');
+        htmlElement.classList.add('light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        htmlElement.classList.remove('light');
+        htmlElement.classList.add('dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    });
+
+    // --- Copy Code Logic ---
+    const copyButtons = document.querySelectorAll('.copy-btn');
+
+    copyButtons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.getAttribute('data-target');
+        const codeElement = document.getElementById(targetId);
+        
+        if (codeElement) {
+          const textToCopy = codeElement.innerText;
+
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-check mr-0.5"></i><span>Copied!</span>';
+            btn.classList.add('text-green-500');
+            
+            setTimeout(() => {
+              btn.innerHTML = originalHTML;
+              btn.classList.remove('text-green-500');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy text: ', err);
+            btn.innerHTML = '<i class="fas fa-times mr-0.5"></i><span>Error</span>';
+            setTimeout(() => {
+              btn.innerHTML = originalHTML;
+            }, 2000);
+          }
+        }
+      });
+    });
+
+// --- Live Clock Logic (12-Hour Format with AM/PM) ---
+function updateClock() {
+  const now = new Date();
+  let hours = now.getHours();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  
+  const hh = String(hours).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  const ss = String(now.getSeconds()).padStart(2, '0');
+  
+  const elHH = document.getElementById('clock-hh');
+  const elMM = document.getElementById('clock-mm');
+  const elSS = document.getElementById('clock-ss');
+  const elAMPM = document.getElementById('clock-ampm');
+  
+  if (elHH && elMM && elSS && elAMPM) {
+    elHH.textContent = hh;
+    elMM.textContent = mm;
+    elSS.textContent = ss;
+    elAMPM.textContent = ampm;
+  }
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
