@@ -1,0 +1,13 @@
+{
+  "name": "css3d-effects-api",
+  "version": "1.0.0",
+  "description": "Microlink API proxy with Turso database tracking",
+  "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "microlink.io": "^1.0.0"
+  }
+}
