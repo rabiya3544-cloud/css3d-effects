@@ -75,7 +75,14 @@ export async function trackRequest() {
 export async function findRecentScreenshot(sourceUrl, maxAgeMinutes = 60) {
   const result = await client.execute({
     sql: `
-      SELECT image_url, width, height, size, size_pretty, created_at
+      SELECT 
+        image_url AS url,
+        type,
+        width,
+        height,
+        size,
+        size_pretty,
+        created_at
       FROM screenshots
       WHERE source_url = ?
         AND created_at >= datetime('now', '-' || ? || ' minutes')
