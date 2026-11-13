@@ -1,14 +1,7 @@
-import { createClient } from '@libsql/client/web';
+import { createClient } from "@tursodatabase/serverless/compat";
 
-// 1. Check for the URL before initializing
-const url = process.env.TURSO_DATABASE_URL;
-if (!url) {
-  throw new Error('TURSO_DATABASE_URL is not set. Please configure it in your Vercel environment variables.');
-}
-
-// 2. Initialize the client
 const client = createClient({
-  url: url,
+  url: process.env.TURSO_DATABASE_URL,
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
