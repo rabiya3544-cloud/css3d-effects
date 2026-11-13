@@ -1,5 +1,5 @@
 // api/turso.js
-import { createClient } from '@libsql/client';
+import { createClient } from '@libsql/client/web';
 
 // Initialize the client outside the handler to reuse the connection
 const client = createClient({
