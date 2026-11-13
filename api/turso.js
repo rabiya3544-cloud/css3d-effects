@@ -71,3 +71,40 @@ export async function trackRequest() {
   const newCount = await incrementUsage();
   return { success: true, current: newCount, limit: DAILY_LIMIT };
 }
+// Add to api/turso.js
+export async function findRecentScreenshot(sourceUrl, maxAgeMinutes = 60) {
+  const result = await client.execute({
+    sql: `
+      SELECT image_url, width, height, size, size_pretty, created_at
+      FROM screenshots
+      WHERE source_url = ?
+        AND created_at >= datetime('now', '-' || ? || ' minutes')
+      ORDER BY created_at DESC
+      LIMIT 1
+    `,
+    args: [sourceUrl, maxAgeMinutes]
+  });
+  
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
+export async function saveScreenshot(sourceUrl, data) {
+  const result = await client.execute({
+    sql: `
+      INSERT INTO screenshots (source_url, image_url, type, width, height, size, size_pretty)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+      RETURNING id
+    `,
+    args: [
+      sourceUrl,
+      data.url,
+      data.type || 'png',
+      data.width || null,
+      data.height || null,
+      data.size || null,
+      data.size_pretty || null
+    ]
+  });
+  
+  return result.rows[0].id;
+}
