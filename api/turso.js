@@ -1,9 +1,14 @@
-// api/turso.js
 import { createClient } from '@libsql/client/web';
 
-// Initialize the client outside the handler to reuse the connection
+// 1. Check for the URL before initializing
+const url = process.env.TURSO_DATABASE_URL;
+if (!url) {
+  throw new Error('TURSO_DATABASE_URL is not set. Please configure it in your Vercel environment variables.');
+}
+
+// 2. Initialize the client
 const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
+  url: url,
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
