@@ -78,21 +78,28 @@ export default async function handler(req, res) {
         }
         break;
       case 'search':
-        if (!query) return res.status(400).json({ error: 'Missing "query"' });
-        result = await microlink.search(query);
-        break;
-      case 'html':
-        if (!url) return res.status(400).json({ error: 'Missing "url"' });
-        result = await microlink.html(url, options);
-        break;
-      case 'images':
-        if (!url) return res.status(400).json({ error: 'Missing "url"' });
-        result = await microlink.images(url, options);
-        break;
-      case 'metadata':
-        if (!url) return res.status(400).json({ error: 'Missing "url"' });
-        result = await microlink.metadata(url, options);
-        break;
+  if (!query) return res.status(400).json({ error: 'Missing "query"' });
+  result = await microlink.search(query);
+  await logUsage({ type: 'search', status: 200, cached: false });
+  break;
+
+case 'html':
+  if (!url) return res.status(400).json({ error: 'Missing "url"' });
+  result = await microlink.html(url, options);
+  await logUsage({ type: 'html', sourceUrl: url, status: 200, cached: false });
+  break;
+
+case 'images':
+  if (!url) return res.status(400).json({ error: 'Missing "url"' });
+  result = await microlink.images(url, options);
+  await logUsage({ type: 'images', sourceUrl: url, status: 200, cached: false });
+  break;
+
+case 'metadata':
+  if (!url) return res.status(400).json({ error: 'Missing "url"' });
+  result = await microlink.metadata(url, options);
+  await logUsage({ type: 'metadata', sourceUrl: url, status: 200, cached: false });
+  break;
       default:
         return res.status(400).json({ error: `Unsupported type: ${type}` });
     }
