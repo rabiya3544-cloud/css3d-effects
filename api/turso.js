@@ -108,3 +108,19 @@ export async function saveScreenshot(sourceUrl, data) {
   
   return result.rows[0].id;
 }
+
+// Add to api/turso.js
+export async function logUsage({ type, sourceUrl = null, status, cached = false }) {
+  try {
+    await client.execute({
+      sql: `
+        INSERT INTO usage_log (type, source_url, status, cached)
+        VALUES (?, ?, ?, ?)
+      `,
+      args: [type, sourceUrl, status, cached ? 1 : 0]
+    });
+  } catch (error) {
+    // Logging should never break the main request
+    console.error('Failed to log usage:', error);
+  }
+}
