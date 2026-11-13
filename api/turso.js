@@ -93,7 +93,7 @@ export async function findRecentScreenshot(sourceUrl, maxAgeMinutes = 60) {
   const result = await client.execute({
     sql: `
       SELECT 
-        image_url AS url,
+        image_url,
         type,
         width,
         height,
@@ -108,10 +108,35 @@ export async function findRecentScreenshot(sourceUrl, maxAgeMinutes = 60) {
     `,
     args: [sourceUrl, maxAgeMinutes]
   });
-  
-  return result.rows.length > 0 ? result.rows[0] : null;
-}
 
+  if (result.rows.length === 0) return null;
+
+  const row = result.rows[0];
+
+  // Handle array-style rows (driver returns arrays when aliases are used)
+  if (Array.isArray(row)) {
+    return {
+      url: row[0],
+      type: row[1],
+      width: row[2],
+      height: row[3],
+      size: row[4],
+      size_pretty: row[5],
+      created_at: row[6]
+    };
+  }
+
+  // Handle object-style rows (alias was the culprit, but be defensive)
+  return {
+    url: row.image_url,
+    type: row.type,
+    width: row.width,
+    height: row.height,
+    size: row.size,
+    size_pretty: row.size_pretty,
+    created_at: row.created_at
+  };
+}
 export async function saveScreenshot(sourceUrl, data) {
   const result = await client.execute({
     sql: `
