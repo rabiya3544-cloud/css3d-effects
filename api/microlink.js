@@ -1,8 +1,18 @@
 // api/microlink.js
 import createClient from 'microlink.io';
-import { trackRequest } from './turso.js'; // Import our tracking helper
+import { trackRequest } from './turso.js';
 
 export default async function handler(req, res) {
+  // --- CORS Headers ---
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -13,10 +23,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing "type" parameter' });
   }
 
-  // --- 1. Track the request BEFORE calling Microlink ---
   try {
     const usage = await trackRequest();
-    
     if (!usage.success) {
       return res.status(429).json({ 
         error: 'Too Many Requests', 
@@ -24,25 +32,17 @@ export default async function handler(req, res) {
         usage: { current: usage.current, limit: usage.limit }
       });
     }
-    
-    // Optional: log the usage to help you monitor
-    console.log(`Microlink usage: ${usage.current}/${usage.limit}`);
-    
   } catch (dbError) {
     console.error('Turso tracking failed:', dbError);
-    // Decide if you want to fail open (allow request) or fail closed (block request).
-    // Failing closed is safer for protecting your API quota.
     return res.status(500).json({ error: 'Internal tracking error' });
   }
 
-  // --- 2. Proceed with Microlink request ---
   const microlink = createClient({
     apiKey: process.env.MICROLINK_API_KEY
   });
 
   try {
     let result;
-
     switch (type) {
       case 'screenshot':
         if (!url) return res.status(400).json({ error: 'Missing "url"' });
@@ -67,9 +67,7 @@ export default async function handler(req, res) {
       default:
         return res.status(400).json({ error: `Unsupported type: ${type}` });
     }
-
     return res.status(200).json(result);
-
   } catch (error) {
     console.error('Microlink API Error:', error);
     return res.status(500).json({ error: error.message });
