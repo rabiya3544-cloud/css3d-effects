@@ -1,10 +1,6 @@
-// api/stats.js
-import { createClient } from "@tursodatabase/serverless/compat";
-
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+// api/stats.js (replace the import + init)
+import { client } from './turso.js';
+// ... remove the createClient block entirely
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
