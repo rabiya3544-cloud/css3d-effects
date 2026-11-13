@@ -16,7 +16,16 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { type, url, query, options = {} } = req.body;
+  const { 
+  type, 
+  url, 
+  query, 
+  options = {}, 
+  viewport = null, 
+  meta = true, 
+  adblock = true, 
+  force = false 
+} = req.body;
   if (!type) return res.status(400).json({ error: 'Missing "type" parameter' });
 
   const microlink = createClient({
@@ -53,7 +62,13 @@ export default async function handler(req, res) {
 
         // 3. Fetch from Microlink
         try {
-          result = await microlink.screenshot(url, options);
+          result = await microlink.screenshot(url, {
+  ...options,
+  ...(viewport && { viewport }),
+  meta,
+  adblock,
+  force
+});
           await logUsage({ type: 'screenshot', sourceUrl: url, status: 200, cached: false });
           await saveScreenshot(url, result);
         } catch (error) {
