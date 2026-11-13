@@ -62,14 +62,29 @@ export async function incrementUsage() {
  * Convenience wrapper: Checks limit, increments if allowed, returns status.
  */
 export async function trackRequest() {
-  const status = await checkUsage();
-  
-  if (!status.allowed) {
-    return { success: false, reason: 'Daily limit reached', current: status.current, limit: DAILY_LIMIT };
+  const today = getTodayUTC();
+
+  // Atomic: increment only if count < LIMIT, otherwise return null
+  const result = await client.execute({
+    sql: `
+      INSERT INTO daily_usage (date, count)
+      VALUES (?, 1)
+      ON CONFLICT(date) DO UPDATE SET
+        count = count + 1,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE count < ?
+      RETURNING count
+    `,
+    args: [today, DAILY_LIMIT],
+  });
+
+  if (result.rows.length === 0) {
+    // No row returned = WHERE clause blocked the increment = limit hit
+    const current = await checkUsage();
+    return { success: false, reason: 'Daily limit reached', current: current.current, limit: DAILY_LIMIT };
   }
 
-  const newCount = await incrementUsage();
-  return { success: true, current: newCount, limit: DAILY_LIMIT };
+  return { success: true, current: result.rows[0].count, limit: DAILY_LIMIT };
 }
 // Add to api/turso.js
 export async function findRecentScreenshot(sourceUrl, maxAgeMinutes = 60) {
