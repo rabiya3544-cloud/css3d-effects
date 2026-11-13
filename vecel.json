@@ -1,0 +1,15 @@
+{
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--experimental-vm-modules"
+    }
+  },
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x",
+      "includeFiles": [
+        "node_modules/@libsql/**"
+      ]
+    }
+  }
+}
